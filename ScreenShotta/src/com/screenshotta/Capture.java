@@ -37,7 +37,8 @@ public class Capture {
 			JFileChooser fr = new JFileChooser();
 			FileSystemView fw = fr.getFileSystemView();
 			fw.getDefaultDirectory();
-			String path = fw.getDefaultDirectory() + "/My Pictures/";
+			String ds = System.getProperty("file.separator");
+			String path = fw.getDefaultDirectory() + ds + "My Pictures" +ds;
 			filename = JOptionPane.showInputDialog(null, "File name?");
 			filename = filename+".png";
 			//filename = "screenshot" + now + ".png";
