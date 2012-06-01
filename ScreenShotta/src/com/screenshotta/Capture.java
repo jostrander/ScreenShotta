@@ -31,8 +31,8 @@ public class Capture {
 			Toolkit toolkit = Toolkit.getDefaultToolkit();
 			Robot robot = new Robot();
 			Thread.sleep(10);
-			Dimension d = toolkit.getScreenSize();
-			Rectangle rect = new Rectangle(d);
+			ScreenController ss = ScreenController.getInstance();
+			Rectangle rect = ss.getScreenArea();
 			Image image = robot.createScreenCapture(rect);
 			JFileChooser fr = new JFileChooser();
 			FileSystemView fw = fr.getFileSystemView();
@@ -40,6 +40,9 @@ public class Capture {
 			String ds = System.getProperty("file.separator");
 			String path = fw.getDefaultDirectory() + ds + "My Pictures" +ds;
 			filename = JOptionPane.showInputDialog(null, "File name?");
+			if (filename == null) { 
+				return null;
+			}
 			filename = filename+".png";
 			//filename = "screenshot" + now + ".png";
 			File file = new File(path + filename);

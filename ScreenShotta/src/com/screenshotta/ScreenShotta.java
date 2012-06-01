@@ -15,17 +15,24 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-public class Tray {
+public class ScreenShotta {
 	public static TrayIcon trayicon = new TrayIcon(getIcon());
 	public static SystemTray systray = SystemTray.getSystemTray();
 	
 	public static void main(String[] args) {
+		ScreenShotta ss = new ScreenShotta();
+		ss.initTray();
+		ScreenController sc = ScreenController.getInstance();
+		int i = sc.getNumberOfScreens();
+		trayicon.displayMessage("Welcome to ScreenShotta!", "Click the icon to take a screenshot!\n "+i+" Screen(s) Detected", TrayIcon.MessageType.NONE);
+	}
+	private void initTray() {
 		try {
 			systray.add(trayicon);
-			trayicon.displayMessage("Welcome to ScreenShotta!", "Click the icon to take a screenshot!\nRight Click for more options.", TrayIcon.MessageType.NONE);
 			PopupMenu popup = new PopupMenu();
 			MenuItem exit = new MenuItem("Exit");
 			MenuItem takess = new MenuItem("Take Screenshot");
+			MenuItem update = new MenuItem("Update Screens");
 			exit.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent ap) {	
@@ -40,6 +47,13 @@ public class Tray {
 					String filepath = Capture.takeScreenshot();
 					trayicon.displayMessage("Screenshot Saved!", filepath, TrayIcon.MessageType.NONE);				
 				}});
+			update.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					ScreenController ss = ScreenController.getInstance();
+					ss.update();
+				}});
+			popup.add(update);
 			popup.add(takess);
 			popup.add(exit);
 			trayicon.setPopupMenu(popup);
@@ -63,7 +77,7 @@ public class Tray {
 						trayicon.displayMessage("Screenshot Saved!", filepath, TrayIcon.MessageType.NONE);
 					}
 					if (m.getButton() == 3) {
-						System.exit(0);
+						//System.exit(0);
 					}
 					
 				}
@@ -72,14 +86,14 @@ public class Tray {
 		} catch (AWTException e) {
 			e.printStackTrace();
 		}
-		
+	}
+	public static void TrayMessage (String title, String text) {
+		trayicon.displayMessage(title, text, TrayIcon.MessageType.INFO);
 	}
 	private static Image getIcon() {
 		Image returnable = null;
 		try {
-			returnable = ImageIO.read(Tray.class.getResourceAsStream("/res/icon.png"));
-			//File image = new File("res/icon.png");
-			//returnable = ImageIO.read(image);
+			returnable = ImageIO.read(ScreenShotta.class.getResourceAsStream("/res/icon.png"));
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
