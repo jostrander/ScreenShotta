@@ -47,16 +47,25 @@ public class ScreenController {
 		Iterator<Screen> itr = screens.iterator();
 		while (itr.hasNext()) {
 			Screen temp = itr.next();
-			if (rect.x >= temp.x) {
+			if ((temp.x+temp.width) >= rect.width) {
+				rect.width = temp.x+temp.width;
+			}
+			if ((temp.y+temp.height) >= rect.height) {
+				rect.height = temp.y+temp.height;
+			}
+			if (temp.x < rect.x) {
 				rect.x = temp.x;
 			}
-			if (rect.y >= temp.y) {
+			if (temp.y < rect.y) {
 				rect.y = temp.y;
 			}
-			rect.height+=temp.height;
-			rect.width+=temp.width;
-			System.out.println(rect);
 		} 
+		if (rect.x < 0) {
+			rect.width = rect.width + (Math.abs(rect.x));
+		}
+		if (rect.y < 0) {
+			rect.height = rect.height + (Math.abs(rect.y));
+		}
 		return rect;
 	}
 	private class Screen {
@@ -71,6 +80,10 @@ public class ScreenController {
 			width  = g.getDefaultConfiguration().getBounds().width;
 			x = g.getDefaultConfiguration().getBounds().x;
 			y = g.getDefaultConfiguration().getBounds().y;
+		}
+		public String toString() {
+			String s = new String("x="+x+" y="+y+" width="+width+" height="+height);
+			return s;
 		}
 		/*public int height(){
 			return height;
